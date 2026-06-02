@@ -1,313 +1,187 @@
-const pesos = new Intl.NumberFormat('en-PH', { style: 'currency', currency: 'PHP', maximumFractionDigits: 0 });
+const money = n => '₱' + Math.round(n * 56).toLocaleString('en-PH');
 
-const image = (query) => `https://source.unsplash.com/900x700/?${encodeURIComponent(query)}`;
-
-const categories = [
-  { name: 'Acoustic Guitars', key: 'Acoustic Guitars', img: image('steel string acoustic guitar dreadnought'), desc: 'Steel-string acoustics for country, folk, worship, and songwriting.' },
-  { name: 'Nylon/Classical Guitars', key: 'Nylon/Classical Guitars', img: image('classical nylon guitar'), desc: 'Warm nylon-string guitars for classical, folk, Latin, and fingerstyle.' },
-  { name: 'Electric Guitars', key: 'Electric Guitars', img: image('electric guitar stratocaster les paul'), desc: 'Electric guitars for rock, blues, metal, pop, funk, and stage work.' },
-  { name: 'Bass Guitars', key: 'Bass Guitars', img: image('bass guitar'), desc: 'Low-end groove machines for bands, worship, funk, rock, and recording.' },
-  { name: 'Keyboards', key: 'Keyboards', img: image('digital piano keyboard'), desc: 'Digital pianos and keyboards for worship, composition, and studio work.' },
-  { name: 'Drums', key: 'Drums', img: image('drum kit'), desc: 'Acoustic and electronic kits for rhythm, performance, and practice.' },
-  { name: 'Accessories', key: 'Accessories', img: image('guitar accessories picks capo strings'), desc: 'Strings, picks, capos, straps, tuners, and cables.' }
-];
+const imageFor = (query, sig) => `https://source.unsplash.com/900x650/?${encodeURIComponent(query)}&sig=${sig}`;
 
 const products = [
-  // Acoustic
-  { id: 1, name: 'Martin D-28', category: 'Acoustic Guitars', price: 175000, stock: 'In Stock', img: image('Martin D-28 acoustic guitar'), desc: 'Legendary dreadnought acoustic with strong projection and rosewood-style depth.', tone: 'Powerful bass, clear trebles, rich sustain, bluegrass-ready authority.', genres: ['Bluegrass','Country','Folk','Worship'], styles: ['Flatpicking','Strumming','Singer-songwriter'], level: 'Intermediate to Professional' },
-  { id: 2, name: 'Martin D-18', category: 'Acoustic Guitars', price: 155000, stock: 'In Stock', img: image('Martin D-18 acoustic guitar'), desc: 'Classic mahogany-style dreadnought known for dry, focused, woody response.', tone: 'Warm, punchy, direct, and earthy with strong midrange.', genres: ['Country','Folk','Bluegrass','Americana'], styles: ['Flatpicking','Rhythm','Storytelling songs'], level: 'Intermediate to Professional' },
-  { id: 3, name: 'Taylor 814ce', category: 'Acoustic Guitars', price: 215000, stock: 'Limited Stock', img: image('Taylor 814ce acoustic guitar'), desc: 'Premium grand auditorium acoustic-electric for stage and studio versatility.', tone: 'Hi-fi clarity, sparkling top end, balanced low end, modern acoustic polish.', genres: ['Pop','Worship','Country','Fingerstyle'], styles: ['Fingerstyle','Live performance','Recording'], level: 'Advanced to Professional' },
-  { id: 4, name: 'Taylor GS Mini', category: 'Acoustic Guitars', price: 48900, stock: 'In Stock', img: image('Taylor GS Mini acoustic guitar'), desc: 'Compact acoustic with a surprisingly full sound and easy travel-friendly body.', tone: 'Bright, compact, lively, and clear.', genres: ['Pop','Folk','Travel','Beginner'], styles: ['Casual strumming','Practice','Songwriting'], level: 'Beginner to Intermediate' },
-  { id: 5, name: 'Yamaha F310 Acoustic Guitar', category: 'Acoustic Guitars', price: 7990, stock: 'In Stock', img: image('Yamaha F310 acoustic guitar'), desc: 'Affordable steel-string acoustic ideal for students and beginners.', tone: 'Bright, sweet, beginner-friendly acoustic tone.', genres: ['Beginner','Folk','Country','Worship'], styles: ['Strumming','Practice','School performance'], level: 'Beginner' },
-  { id: 6, name: 'Fender CD-60S Dreadnought', category: 'Acoustic Guitars', price: 14990, stock: 'In Stock', img: image('Fender CD-60S acoustic guitar'), desc: 'Comfortable dreadnought with full sound for strummers and singer-songwriters.', tone: 'Full, balanced dreadnought tone with good projection.', genres: ['Worship','Pop Acoustic','Country','Folk'], styles: ['Strumming','Singing accompaniment','Live acoustic'], level: 'Beginner to Intermediate' },
+  {id:1,name:'Martin D-28',category:'Acoustic Guitars',price:2899.99,img:imageFor('steel string dreadnought acoustic guitar',1),rating:5,reviews:567,desc:'Legendary dreadnought acoustic with professional projection and rich rosewood character.',tone:'Rich, powerful, deep dreadnought tone with strong bass and sparkling highs.',genres:['Country','Folk','Bluegrass','Singer-Songwriter'],styles:['Flatpicking','Strumming','Recording','Live Performance'],level:'Advanced to Professional',stock:'In Stock'},
+  {id:2,name:'Martin D-18',category:'Acoustic Guitars',price:2499.99,img:imageFor('mahogany acoustic guitar dreadnought',2),rating:5,reviews:432,desc:'Classic mahogany dreadnought known for balance, warmth, and rootsy acoustic character.',tone:'Warm, woody, balanced Martin tone.',genres:['Folk','Country','Blues','Americana'],styles:['Fingerpicking','Strumming','Songwriting'],level:'Intermediate to Professional',stock:'In Stock'},
+  {id:3,name:'Taylor 814ce',category:'Acoustic Guitars',price:3299.99,img:imageFor('Taylor acoustic guitar cutaway',3),rating:5,reviews:389,desc:'Premium Grand Auditorium acoustic-electric built for clarity, articulation, and stage use.',tone:'Crystal clear, modern, articulate acoustic tone.',genres:['Pop','Worship','Country','Singer-Songwriter'],styles:['Fingerstyle','Live Performance','Recording'],level:'Advanced to Professional',stock:'In Stock'},
+  {id:4,name:'Taylor GS Mini',category:'Acoustic Guitars',price:599.99,img:imageFor('small acoustic guitar travel guitar',4),rating:4.9,reviews:621,desc:'Compact acoustic guitar with a surprisingly full voice; great for students and travel.',tone:'Balanced, bright, compact acoustic tone.',genres:['Pop','Folk','Travel','Worship'],styles:['Practice','Travel','Songwriting'],level:'Beginner to Advanced',stock:'In Stock'},
+  {id:5,name:'Yamaha F310 Acoustic Guitar',category:'Acoustic Guitars',price:199.99,img:imageFor('Yamaha acoustic guitar dreadnought',5),rating:4.8,reviews:342,desc:'Reliable beginner acoustic guitar with comfortable playability and sweet acoustic tone.',tone:'Bright, sweet, beginner-friendly acoustic tone.',genres:['Country','Folk','Worship','School Performance'],styles:['Strumming','Practice','Beginner Lessons'],level:'Beginner',stock:'In Stock'},
+  {id:6,name:'Fender CD-60S Dreadnought',category:'Acoustic Guitars',price:249.99,img:imageFor('Fender acoustic guitar dreadnought',6),rating:4.9,reviews:428,desc:'Solid-top dreadnought with full sound, easy playability, and strong projection.',tone:'Full, balanced steel-string acoustic tone.',genres:['Worship','Pop','Country','Singer-Songwriter'],styles:['Strumming','Vocals','Acoustic Band'],level:'Beginner to Advanced',stock:'In Stock'},
 
-  // Nylon
-  { id: 7, name: 'Yamaha C40 Classical Guitar', category: 'Nylon/Classical Guitars', price: 6990, stock: 'In Stock', img: image('Yamaha C40 classical nylon guitar'), desc: 'Popular entry-level classical guitar with soft nylon strings.', tone: 'Warm, soft, rounded nylon-string tone.', genres: ['Classical','Folk','Beginner','School'], styles: ['Classical basics','Fingerstyle','Practice'], level: 'Beginner' },
-  { id: 8, name: 'Cordoba C5 Classical Guitar', category: 'Nylon/Classical Guitars', price: 25900, stock: 'In Stock', img: image('Cordoba C5 classical guitar'), desc: 'Expressive classical guitar with traditional look and comfortable playability.', tone: 'Warm, expressive, traditional nylon tone.', genres: ['Classical','Latin','Folk'], styles: ['Fingerstyle','Classical performance','Soft acoustic'], level: 'Intermediate' },
-  { id: 9, name: 'Cordoba C7 Classical Guitar', category: 'Nylon/Classical Guitars', price: 42900, stock: 'Limited Stock', img: image('Cordoba C7 classical guitar'), desc: 'Higher-grade nylon guitar for players needing more projection and depth.', tone: 'Deeper, richer, more resonant classical voice.', genres: ['Classical','Spanish','Latin','Fingerstyle'], styles: ['Classical pieces','Solo performance','Recording'], level: 'Intermediate to Advanced' },
-  { id: 10, name: 'Alvarez 4103 1970s Classical Guitar', category: 'Nylon/Classical Guitars', price: 38900, stock: 'Vintage / Subject to Availability', img: image('vintage Alvarez classical guitar nylon'), desc: 'Vintage-style 1970s Alvarez classical model for collectors and nylon tone lovers.', tone: 'Aged, woody, mellow, intimate nylon-string character.', genres: ['Classical','Folk','Vintage','Ballads'], styles: ['Fingerpicking','Living-room performance','Vintage collecting'], level: 'Intermediate to Collector' },
-  { id: 11, name: 'Alvarez AC65 Classical Guitar', category: 'Nylon/Classical Guitars', price: 31900, stock: 'In Stock', img: image('Alvarez classical guitar nylon'), desc: 'Modern Alvarez classical guitar with comfortable response and warm tone.', tone: 'Smooth, balanced, warm classical voice.', genres: ['Classical','Folk','Latin'], styles: ['Fingerstyle','Practice','Recital'], level: 'Beginner to Intermediate' },
-  { id: 12, name: 'Yamaha CG122MSH', category: 'Nylon/Classical Guitars', price: 20900, stock: 'In Stock', img: image('Yamaha CG classical guitar'), desc: 'Solid-top classical guitar option for advancing students.', tone: 'Clear nylon tone with improved sustain and dynamic response.', genres: ['Classical','Folk','School','Latin'], styles: ['Classical study','Fingerstyle','Performance'], level: 'Intermediate' },
+  {id:7,name:'Yamaha C40 Classical Guitar',category:'Nylon/Classical Guitars',price:179.99,img:imageFor('classical nylon string guitar',7),rating:4.7,reviews:521,desc:'Popular student classical guitar with soft nylon strings and teacher-friendly playability.',tone:'Warm, soft nylon-string tone.',genres:['Classical','Folk','Beginner'],styles:['Fingerstyle','School Practice','Classical Study'],level:'Beginner',stock:'In Stock'},
+  {id:8,name:'Cordoba C5 Classical Guitar',category:'Nylon/Classical Guitars',price:379.99,img:imageFor('Cordoba classical nylon guitar cedar',8),rating:4.9,reviews:287,desc:'Cedar-top classical guitar with expressive response and traditional nylon warmth.',tone:'Warm, expressive, traditional nylon tone.',genres:['Classical','Latin','Folk'],styles:['Fingerstyle','Soft Acoustic','Classical Performance'],level:'Intermediate to Advanced',stock:'In Stock'},
+  {id:9,name:'Cordoba C7 Classical Guitar',category:'Nylon/Classical Guitars',price:599.99,img:imageFor('classical guitar nylon rosewood',9),rating:5,reviews:234,desc:'Professional-feeling nylon guitar with strong projection and refined classical voice.',tone:'Rich, concert-style nylon tone.',genres:['Classical','Latin','Flamenco'],styles:['Concert','Fingerstyle','Classical Study'],level:'Advanced to Professional',stock:'In Stock'},
+  {id:10,name:'Alvarez 4103 1970s Classical Guitar',category:'Nylon/Classical Guitars',price:449.99,img:imageFor('vintage classical guitar nylon',10),rating:4.8,reviews:156,desc:'Vintage-style 1970s Alvarez classical model for players who love old mellow nylon tone.',tone:'Vintage, mellow, warm nylon tone.',genres:['Classical','Traditional Folk','Vintage'],styles:['Fingerstyle','Traditional Music','Soft Performance'],level:'Intermediate to Advanced',stock:'Limited Stock'},
+  {id:11,name:'Alvarez AC65',category:'Nylon/Classical Guitars',price:329.99,img:imageFor('Alvarez classical guitar nylon',11),rating:4.7,reviews:198,desc:'Affordable classical guitar with clear tone and comfortable feel for growing players.',tone:'Clear, balanced student nylon tone.',genres:['Classical','Folk','Practice'],styles:['Classical Study','Fingerstyle','School'],level:'Beginner to Intermediate',stock:'In Stock'},
+  {id:12,name:'Yamaha CG122MSH Classical Guitar',category:'Nylon/Classical Guitars',price:269.99,img:imageFor('Yamaha classical guitar nylon',12),rating:4.8,reviews:312,desc:'Intermediate classical guitar with solid-top style response and serious practice value.',tone:'Rich, warm intermediate nylon tone.',genres:['Classical','Latin','Folk'],styles:['Practice','Fingerstyle','Classical'],level:'Intermediate',stock:'In Stock'},
 
-  // Electric
-  { id: 13, name: 'Fender Player Stratocaster', category: 'Electric Guitars', price: 65900, stock: 'In Stock', img: image('Fender Stratocaster electric guitar'), desc: 'Iconic Strat-style electric for clean tones, blues bends, funk rhythm, and pop.', tone: 'Bright, glassy, clear, versatile single-coil tone.', genres: ['Blues','Pop','Funk','Worship','Classic Rock'], styles: ['Lead','Rhythm','Clean tones','Chords'], level: 'Intermediate' },
-  { id: 14, name: 'Fender Telecaster', category: 'Electric Guitars', price: 62900, stock: 'In Stock', img: image('Fender Telecaster electric guitar'), desc: 'Classic Tele-style guitar known for twang, clarity, and simple reliability.', tone: 'Snappy, bright, cutting, country-rock twang.', genres: ['Country','Rock','Indie','Worship'], styles: ['Rhythm','Chicken picking','Lead','Songwriting'], level: 'Beginner to Professional' },
-  { id: 15, name: 'Gibson Les Paul Standard 50s', category: 'Electric Guitars', price: 185000, stock: 'Limited Stock', img: image('Gibson Les Paul Standard electric guitar'), desc: 'Legendary single-cut electric with humbuckers, sustain, and rock authority.', tone: 'Thick, warm, powerful humbucker tone with long sustain.', genres: ['Rock','Blues','Hard Rock','Metal'], styles: ['Lead guitar','Solos','Power chords'], level: 'Intermediate to Professional' },
-  { id: 16, name: 'Gibson SG Standard', category: 'Electric Guitars', price: 119000, stock: 'In Stock', img: image('Gibson SG Standard electric guitar'), desc: 'Lightweight double-cut rock guitar with aggressive bite and upper fret access.', tone: 'Raw, biting, mid-forward humbucker tone.', genres: ['Rock','Hard Rock','Blues','Alternative'], styles: ['Riffs','Lead','Stage performance'], level: 'Intermediate to Professional' },
-  { id: 17, name: 'Epiphone Les Paul Standard', category: 'Electric Guitars', price: 38900, stock: 'In Stock', img: image('Epiphone Les Paul electric guitar'), desc: 'Affordable Les Paul-style electric with warm humbucker sound.', tone: 'Thick, rounded, classic rock tone at a student-friendly price.', genres: ['Rock','Blues','Worship','Pop Rock'], styles: ['Rhythm','Lead','Practice','Band use'], level: 'Beginner to Intermediate' },
-  { id: 18, name: 'Ibanez RG421', category: 'Electric Guitars', price: 29900, stock: 'In Stock', img: image('Ibanez RG electric guitar'), desc: 'Fast modern electric with dual humbuckers for rock and metal.', tone: 'Aggressive, focused, modern high-gain tone.', genres: ['Metal','Rock','Hard Rock','Shred'], styles: ['Fast playing','Riffs','Solos'], level: 'Intermediate' },
+  {id:13,name:'Fender Player Stratocaster',category:'Electric Guitars',price:899.99,img:imageFor('Fender Stratocaster electric guitar',13),rating:4.9,reviews:612,desc:'Iconic Strat-style electric guitar with versatile single-coil sound for many genres.',tone:'Bright, clear, glassy single-coil tone.',genres:['Pop','Blues','Funk','Worship','Indie','Classic Rock'],styles:['Lead Guitar','Rhythm','Funk','Blues'],level:'Intermediate to Advanced',stock:'In Stock'},
+  {id:14,name:'Fender Telecaster',category:'Electric Guitars',price:849.99,img:imageFor('Fender Telecaster electric guitar',14),rating:4.9,reviews:501,desc:'Classic Tele-style electric with punch, twang, and simple stage-ready reliability.',tone:'Twangy, bright, punchy electric tone.',genres:['Country','Rock','Indie','Blues'],styles:['Rhythm','Chicken Pickin','Lead Guitar'],level:'Beginner to Professional',stock:'In Stock'},
+  {id:15,name:'Gibson Les Paul Standard 50s',category:'Electric Guitars',price:2499.99,img:imageFor('Gibson Les Paul electric guitar',15),rating:5,reviews:389,desc:'Legendary humbucker guitar with thick tone, sustain, and classic rock authority.',tone:'Thick, warm, powerful humbucker tone.',genres:['Rock','Blues','Hard Rock','Metal'],styles:['Lead Guitar','Sustain Solos','Rock Rhythm'],level:'Intermediate to Professional',stock:'In Stock'},
+  {id:16,name:'Gibson SG Standard',category:'Electric Guitars',price:1799.99,img:imageFor('Gibson SG electric guitar',16),rating:4.9,reviews:321,desc:'Lightweight double-cut electric guitar with aggressive midrange and rock energy.',tone:'Raw, biting, mid-forward humbucker tone.',genres:['Rock','Hard Rock','Blues'],styles:['Riffs','Lead Guitar','Stage Performance'],level:'Intermediate to Professional',stock:'In Stock'},
+  {id:17,name:'Epiphone Les Paul Standard',category:'Electric Guitars',price:699.99,img:imageFor('Epiphone Les Paul electric guitar',17),rating:4.8,reviews:488,desc:'Accessible Les Paul-style guitar with warm humbucker tone for rock and blues.',tone:'Warm, thick, affordable humbucker tone.',genres:['Rock','Blues','Pop Rock'],styles:['Rhythm','Lead','Practice'],level:'Beginner to Intermediate',stock:'In Stock'},
+  {id:18,name:'Ibanez RG421',category:'Electric Guitars',price:499.99,img:imageFor('Ibanez RG electric guitar',18),rating:4.8,reviews:456,desc:'Fast modern electric guitar built for metal, hard rock, and technical lead playing.',tone:'Fast, aggressive, modern electric tone.',genres:['Metal','Rock','Hard Rock'],styles:['Shredding','Lead Guitar','Fast Playing'],level:'Intermediate',stock:'In Stock'},
 
-  // Bass
-  { id: 19, name: 'Fender Precision Bass', category: 'Bass Guitars', price: 68900, stock: 'In Stock', img: image('Fender Precision Bass guitar'), desc: 'Classic P-Bass style instrument for punchy foundational low end.', tone: 'Punchy, strong, focused low-end tone.', genres: ['Rock','Worship','Pop','Punk'], styles: ['Band performance','Recording','Groove'], level: 'Beginner to Professional' },
-  { id: 20, name: 'Fender Jazz Bass', category: 'Bass Guitars', price: 71900, stock: 'In Stock', img: image('Fender Jazz Bass guitar'), desc: 'Versatile bass with articulate sound and smooth playing feel.', tone: 'Clear, flexible, growly, articulate bass tone.', genres: ['Funk','Jazz','Pop','Rock'], styles: ['Slap','Fingerstyle','Recording'], level: 'Intermediate' },
-  { id: 21, name: 'Yamaha TRBX174 Bass', category: 'Bass Guitars', price: 15900, stock: 'In Stock', img: image('Yamaha TRBX bass guitar'), desc: 'Reliable beginner bass for students and first band setups.', tone: 'Balanced, beginner-friendly bass tone.', genres: ['Beginner','Pop','Rock','Worship'], styles: ['Practice','Band rehearsal','Groove'], level: 'Beginner' },
-  { id: 22, name: 'Ibanez GSR200 Bass', category: 'Bass Guitars', price: 18900, stock: 'In Stock', img: image('Ibanez GSR bass guitar'), desc: 'Comfortable modern bass with slim neck and flexible electronics.', tone: 'Modern, smooth, versatile bass sound.', genres: ['Rock','Pop','Funk','Beginner'], styles: ['Practice','Groove','Live band'], level: 'Beginner to Intermediate' },
+  {id:19,name:'Fender Player Precision Bass',category:'Bass Guitars',price:849.99,img:imageFor('Fender Precision Bass guitar',19),rating:4.9,reviews:367,desc:'Punchy P-Bass tone that anchors bands, worship sets, rock grooves, and recordings.',tone:'Punchy, strong low-end bass tone.',genres:['Rock','Worship','Pop','Recording'],styles:['Groove','Live Performance','Band Foundation'],level:'Beginner to Professional',stock:'In Stock'},
+  {id:20,name:'Fender Jazz Bass',category:'Bass Guitars',price:899.99,img:imageFor('Fender Jazz Bass guitar',20),rating:4.9,reviews:333,desc:'Versatile bass with articulate tone and smooth feel for funk, jazz, pop, and rock.',tone:'Articulate, flexible, growly bass tone.',genres:['Funk','Jazz','Pop','Rock'],styles:['Groove','Slap','Recording'],level:'Intermediate to Professional',stock:'In Stock'},
+  {id:21,name:'Yamaha TRBX174 Bass',category:'Bass Guitars',price:249.99,img:imageFor('Yamaha TRBX bass guitar',21),rating:4.7,reviews:298,desc:'Affordable bass for students and beginner band members needing reliable low end.',tone:'Balanced, beginner-friendly bass tone.',genres:['Pop','Rock','Band Practice'],styles:['Practice','Groove','Beginner Lessons'],level:'Beginner',stock:'In Stock'},
+  {id:22,name:'Ibanez GSR200 Bass',category:'Bass Guitars',price:279.99,img:imageFor('Ibanez bass guitar',22),rating:4.7,reviews:251,desc:'Comfortable modern bass with active-style punch and flexible beginner-friendly sound.',tone:'Modern, punchy, versatile bass tone.',genres:['Rock','Metal','Pop'],styles:['Band Practice','Recording','Live'],level:'Beginner to Intermediate',stock:'In Stock'},
 
-  // Keys
-  { id: 23, name: 'Yamaha PSR-E373', category: 'Keyboards', price: 16900, stock: 'In Stock', img: image('Yamaha PSR keyboard'), desc: 'Portable arranger keyboard for students, practice, and simple performances.', tone: 'Versatile keyboard tones with many voices and rhythms.', genres: ['Worship','Pop','School','Beginner'], styles: ['Practice','Accompaniment','Composition'], level: 'Beginner' },
-  { id: 24, name: 'Roland FP-10 Digital Piano', category: 'Keyboards', price: 42900, stock: 'In Stock', img: image('Roland FP-10 digital piano'), desc: 'Compact digital piano with weighted keys for realistic piano practice.', tone: 'Authentic piano tone with expressive touch response.', genres: ['Classical','Worship','Pop','Ballads'], styles: ['Piano practice','Performance','Recording'], level: 'Beginner to Intermediate' },
-  { id: 25, name: 'Casio CT-S1', category: 'Keyboards', price: 24900, stock: 'In Stock', img: image('Casio keyboard piano'), desc: 'Minimal modern keyboard with great sounds and portable design.', tone: 'Clean, modern, expressive keyboard tones.', genres: ['Pop','Indie','Worship','Composition'], styles: ['Songwriting','Practice','Home recording'], level: 'Beginner to Intermediate' },
+  {id:23,name:'Yamaha PSR-E373 Keyboard',category:'Keyboards',price:229.99,img:imageFor('Yamaha keyboard digital piano',23),rating:4.8,reviews:402,desc:'Portable arranger keyboard for lessons, worship, composition, and home practice.',tone:'Versatile digital keyboard sounds.',genres:['Worship','Pop','Practice'],styles:['Composition','Lessons','Accompaniment'],level:'Beginner to Intermediate',stock:'In Stock'},
+  {id:24,name:'Roland FP-10 Digital Piano',category:'Keyboards',price:599.99,img:imageFor('Roland digital piano keyboard',24),rating:4.9,reviews:377,desc:'Compact digital piano with weighted keys and realistic piano feel.',tone:'Expressive, realistic digital piano tone.',genres:['Classical','Worship','Pop'],styles:['Piano Study','Performance','Recording'],level:'Beginner to Advanced',stock:'In Stock'},
+  {id:25,name:'Casio CT-S1 Keyboard',category:'Keyboards',price:249.99,img:imageFor('Casio keyboard synthesizer',25),rating:4.8,reviews:214,desc:'Slim portable keyboard with stylish design and creative modern sounds.',tone:'Clean, portable, modern keyboard tone.',genres:['Pop','Indie','Practice'],styles:['Composition','Practice','Home Studio'],level:'Beginner to Intermediate',stock:'In Stock'},
 
-  // Drums
-  { id: 26, name: 'Pearl Roadshow Drum Kit', category: 'Drums', price: 48900, stock: 'In Stock', img: image('Pearl Roadshow drum kit'), desc: 'Complete acoustic drum kit for beginner to intermediate drummers.', tone: 'Full, punchy acoustic drum sound.', genres: ['Rock','Pop','Worship','School Band'], styles: ['Practice','Live band','Rhythm training'], level: 'Beginner to Intermediate' },
-  { id: 27, name: 'Yamaha Rydeen Drum Kit', category: 'Drums', price: 58900, stock: 'Limited Stock', img: image('Yamaha Rydeen drum kit'), desc: 'Reliable Yamaha acoustic drum kit with durable shells and hardware.', tone: 'Balanced acoustic kit tone with solid attack.', genres: ['Rock','Pop','Worship','Funk'], styles: ['Live performance','Band practice','Recording'], level: 'Beginner to Advanced' },
-  { id: 28, name: 'Roland TD-1DMK Electronic Drums', category: 'Drums', price: 52900, stock: 'In Stock', img: image('Roland electronic drum kit'), desc: 'Quiet electronic kit for home practice and headphone monitoring.', tone: 'Clean electronic drum sounds with practice-friendly response.', genres: ['Pop','Practice','Worship','Home Studio'], styles: ['Silent practice','MIDI recording','Lessons'], level: 'Beginner to Intermediate' },
+  {id:26,name:'Pearl Roadshow Drum Kit',category:'Drums',price:599.99,img:imageFor('Pearl acoustic drum kit',26),rating:4.8,reviews:188,desc:'Complete acoustic drum kit for beginner bands and live practice setups.',tone:'Full acoustic drum kit sound.',genres:['Rock','Pop','Worship'],styles:['Band Practice','Live Performance','Rhythm Training'],level:'Beginner to Intermediate',stock:'In Stock'},
+  {id:27,name:'Yamaha Rydeen Drum Kit',category:'Drums',price:749.99,img:imageFor('Yamaha drum kit',27),rating:4.8,reviews:167,desc:'Reliable Yamaha acoustic drum kit with strong build and clean stage look.',tone:'Balanced acoustic drum tone.',genres:['Rock','Pop','Worship','School Band'],styles:['Live','Practice','Band'],level:'Beginner to Advanced',stock:'In Stock'},
+  {id:28,name:'Roland TD-1DMK Electronic Drums',category:'Drums',price:699.99,img:imageFor('Roland electronic drum kit',28),rating:4.9,reviews:231,desc:'Electronic drum kit for quiet practice, recording, and apartment-friendly drumming.',tone:'Versatile electronic drum sounds.',genres:['Pop','Rock','Practice','Recording'],styles:['Silent Practice','Home Studio','Beat Making'],level:'Beginner to Advanced',stock:'In Stock'},
 
-  // Accessories
-  { id: 29, name: 'Guitar Picks Set', category: 'Accessories', price: 250, stock: 'In Stock', img: image('guitar picks'), desc: 'Assorted picks for acoustic and electric playing.', tone: 'Changes attack, brightness, and control depending on thickness.', genres: ['All Genres'], styles: ['Strumming','Picking','Lead'], level: 'All Levels' },
-  { id: 30, name: 'Kyser-Style Capo', category: 'Accessories', price: 850, stock: 'In Stock', img: image('guitar capo'), desc: 'Quick-change capo for acoustic, electric, and songwriting use.', tone: 'Raises key while preserving open chord shapes.', genres: ['Folk','Country','Worship','Pop'], styles: ['Singing accompaniment','Transposition'], level: 'All Levels' },
-  { id: 31, name: 'Acoustic Guitar Strings', category: 'Accessories', price: 650, stock: 'In Stock', img: image('acoustic guitar strings'), desc: 'Steel strings for acoustic guitars.', tone: 'Fresh brightness, clearer sustain, better tuning response.', genres: ['Acoustic','Country','Folk','Worship'], styles: ['Strumming','Fingerpicking'], level: 'All Levels' },
-  { id: 32, name: 'Instrument Cable 18ft', category: 'Accessories', price: 1200, stock: 'In Stock', img: image('instrument cable guitar'), desc: 'Durable cable for electric guitar, bass, keyboard, and amp connection.', tone: 'Clean signal path for stage and studio.', genres: ['Electric','Bass','Keyboard'], styles: ['Live','Recording','Practice'], level: 'All Levels' }
+  {id:29,name:'Dunlop Guitar Picks Pack',category:'Accessories',price:6.99,img:imageFor('guitar picks',29),rating:4.8,reviews:822,desc:'Assorted picks for acoustic, electric, and bass playing.',tone:'Changes attack and picking feel.',genres:['All Genres'],styles:['Strumming','Lead','Practice'],level:'All Levels',stock:'In Stock'},
+  {id:30,name:'Kyser Quick-Change Capo',category:'Accessories',price:24.99,img:imageFor('guitar capo',30),rating:4.9,reviews:612,desc:'Quick-change capo for fast key changes on acoustic and electric guitars.',tone:'Keeps tone clean while changing key.',genres:['Country','Folk','Worship','Pop'],styles:['Singer-Songwriter','Transposition'],level:'All Levels',stock:'In Stock'},
+  {id:31,name:'Ernie Ball Guitar Strings',category:'Accessories',price:9.99,img:imageFor('guitar strings pack',31),rating:4.9,reviews:1098,desc:'Reliable string set for bright, fresh tone.',tone:'Fresh, bright string response.',genres:['Rock','Pop','Country'],styles:['Maintenance','Recording','Live'],level:'All Levels',stock:'In Stock'},
+  {id:32,name:'Instrument Cable',category:'Accessories',price:19.99,img:imageFor('instrument cable guitar',32),rating:4.7,reviews:340,desc:'Durable cable for electric guitar, bass, keyboards, and amps.',tone:'Clean signal connection.',genres:['All Electric Instruments'],styles:['Live','Practice','Recording'],level:'All Levels',stock:'In Stock'}
 ];
 
-const genres = {
-  Country: ['Martin D-18', 'Fender Telecaster', 'Yamaha F310 Acoustic Guitar'],
-  Folk: ['Martin D-28', 'Taylor GS Mini', 'Yamaha C40 Classical Guitar'],
-  Worship: ['Taylor 814ce', 'Fender CD-60S Dreadnought', 'Roland FP-10 Digital Piano'],
-  Rock: ['Gibson Les Paul Standard 50s', 'Gibson SG Standard', 'Fender Precision Bass'],
-  Metal: ['Ibanez RG421', 'Gibson SG Standard', 'Roland TD-1DMK Electronic Drums'],
-  Blues: ['Fender Player Stratocaster', 'Gibson Les Paul Standard 50s', 'Fender Jazz Bass'],
-  Classical: ['Yamaha C40 Classical Guitar', 'Cordoba C7 Classical Guitar', 'Alvarez 4103 1970s Classical Guitar'],
-  Beginner: ['Yamaha F310 Acoustic Guitar', 'Yamaha C40 Classical Guitar', 'Yamaha TRBX174 Bass']
+const categories = [
+  {name:'Acoustic Guitars',short:'Acoustic',img:imageFor('steel string acoustic guitars',101),desc:'Steel-string guitars for country, folk, worship, bluegrass, and songwriting.'},
+  {name:'Nylon/Classical Guitars',short:'Nylon/Classical',img:imageFor('classical nylon guitars',102),desc:'Soft nylon-string guitars for classical, Latin, folk, and fingerstyle.'},
+  {name:'Electric Guitars',short:'Electric',img:imageFor('electric guitars',103),desc:'Solid-body guitars for rock, blues, pop, metal, funk, and worship.'},
+  {name:'Bass Guitars',short:'Bass',img:imageFor('bass guitars',104),desc:'Low-end instruments for grooves, bands, worship, and recording.'},
+  {name:'Keyboards',short:'Keyboards',img:imageFor('digital keyboards piano',105),desc:'Digital keys for worship, composition, piano study, and production.'},
+  {name:'Drums',short:'Drums',img:imageFor('drum kits',106),desc:'Acoustic and electronic drums for rhythm, live bands, and practice.'},
+  {name:'Accessories',short:'Accessories',img:imageFor('guitar accessories capo strings picks',107),desc:'Picks, strings, capos, cables, straps, tuners, and maintenance essentials.'}
+];
+
+const genreMap = {
+  Country:['Martin D-28','Yamaha F310 Acoustic Guitar','Fender Telecaster','Taylor GS Mini'],
+  Folk:['Martin D-18','Taylor GS Mini','Yamaha C40 Classical Guitar'],
+  Worship:['Fender CD-60S Dreadnought','Taylor 814ce','Fender Player Stratocaster','Roland FP-10 Digital Piano'],
+  Rock:['Gibson Les Paul Standard 50s','Gibson SG Standard','Fender Player Stratocaster','Fender Player Precision Bass'],
+  Metal:['Ibanez RG421','Ibanez GSR200 Bass','Roland TD-1DMK Electronic Drums'],
+  Blues:['Fender Player Stratocaster','Gibson Les Paul Standard 50s','Martin D-18'],
+  Classical:['Yamaha C40 Classical Guitar','Cordoba C5 Classical Guitar','Alvarez 4103 1970s Classical Guitar'],
+  Beginner:['Yamaha F310 Acoustic Guitar','Yamaha C40 Classical Guitar','Yamaha TRBX174 Bass','Yamaha PSR-E373 Keyboard']
 };
 
-let activeCategory = 'All';
-let searchTerm = '';
-let cart = [];
+let cart = JSON.parse(localStorage.getItem('mrCart') || '[]');
+let currentFilter = 'All';
+let currentSearch = '';
 
-const $ = (id) => document.getElementById(id);
+const $ = id => document.getElementById(id);
 
-function showToast(message) {
-  const toast = $('toast');
-  toast.textContent = message;
-  toast.classList.remove('hidden');
-  setTimeout(() => toast.classList.add('hidden'), 2200);
+function saveCart(){ localStorage.setItem('mrCart', JSON.stringify(cart)); updateCartCount(); }
+function showToast(msg){ const t=$('toast'); t.textContent=msg; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2600); }
+function openModal(id){ $(id).classList.add('open'); $(id).setAttribute('aria-hidden','false'); }
+function closeModal(id){ $(id).classList.remove('open'); $(id).setAttribute('aria-hidden','true'); }
+
+function renderCategories(){
+  $('categoryGrid').innerHTML = categories.map(c => `
+    <article class="category-card" data-category="${c.name}">
+      <img src="${c.img}" alt="${c.short}" loading="lazy">
+      <div class="content"><h3>${c.short}</h3><p>${c.desc}</p></div>
+    </article>`).join('');
+  document.querySelectorAll('.category-card').forEach(card => card.addEventListener('click', () => setFilter(card.dataset.category)));
 }
 
-function renderCategories() {
-  $('categoryGrid').innerHTML = categories.map(cat => `
-    <article class="category-card">
-      <img src="${cat.img}" alt="${cat.name}" loading="lazy">
-      <div class="category-body">
-        <h3>${cat.name}</h3>
-        <p>${cat.desc}</p>
-        <button onclick="selectCategory('${cat.key}')">View ${cat.name.split(' ')[0]}</button>
-      </div>
-    </article>
-  `).join('');
+function renderGenres(){
+  $('genreTabs').innerHTML = Object.keys(genreMap).map((g,i)=>`<button class="genre-btn ${i===0?'active':''}" data-genre="${g}">${g}</button>`).join('');
+  document.querySelectorAll('.genre-btn').forEach(btn=>btn.addEventListener('click',()=>selectGenre(btn.dataset.genre)));
+  selectGenre('Country');
 }
 
-function renderFilters() {
-  const all = ['All', ...categories.map(c => c.key)];
-  $('filterRow').innerHTML = all.map(cat => `<button class="filter-btn ${activeCategory === cat ? 'active' : ''}" onclick="selectCategory('${cat}')">${cat}</button>`).join('');
+function selectGenre(genre){
+  document.querySelectorAll('.genre-btn').forEach(b=>b.classList.toggle('active',b.dataset.genre===genre));
+  const recs = genreMap[genre].map(name => products.find(p=>p.name===name)).filter(Boolean);
+  $('genreResult').innerHTML = `<h3>${genre} Recommendations</h3><p>These models fit the tone, playing feel, and performance needs for ${genre} music.</p><div class="recommend-list">${recs.map(p=>`<div><strong>${p.name}</strong><br><span>${p.category}</span><br><small>${p.tone}</small></div>`).join('')}</div>`;
 }
 
-function filteredProducts() {
+function setFilter(filter){
+  currentFilter = filter;
+  document.querySelectorAll('.chip').forEach(c=>c.classList.toggle('active',c.dataset.filter===filter));
+  $('productTitle').textContent = filter === 'All' ? 'All Products' : filter;
+  document.querySelector('#best-sellers').scrollIntoView({behavior:'smooth'});
+  renderProducts();
+}
+
+function filteredProducts(){
   return products.filter(p => {
-    const categoryMatch = activeCategory === 'All' || p.category === activeCategory;
-    const haystack = `${p.name} ${p.category} ${p.desc} ${p.tone} ${p.genres.join(' ')} ${p.styles.join(' ')}`.toLowerCase();
-    return categoryMatch && haystack.includes(searchTerm.toLowerCase());
+    const matchesFilter = currentFilter === 'All' || p.category === currentFilter;
+    const q = currentSearch.toLowerCase().trim();
+    const matchesSearch = !q || [p.name,p.category,p.tone,p.desc,...p.genres,...p.styles].join(' ').toLowerCase().includes(q);
+    return matchesFilter && matchesSearch;
   });
 }
 
-function renderProducts() {
-  renderFilters();
+function renderProducts(){
   const list = filteredProducts();
-  $('productHeading').textContent = activeCategory === 'All' ? 'All Products' : activeCategory;
-  $('productSubtext').textContent = searchTerm ? `Showing results for “${searchTerm}”.` : 'Browse realistic model listings with tone notes, genre fit, and product details.';
-  $('emptyState').classList.toggle('hidden', list.length > 0);
-  $('productGrid').innerHTML = list.map(p => `
+  $('productGrid').innerHTML = list.length ? list.map(p=>`
     <article class="product-card">
       <img src="${p.img}" alt="${p.name}" loading="lazy">
-      <div class="product-body">
-        <div class="product-meta"><span class="price">${pesos.format(p.price)}</span><span class="stock">${p.stock}</span></div>
+      <div class="content">
         <h3>${p.name}</h3>
-        <p>${p.desc}</p>
-        <div class="tags">${p.genres.slice(0,3).map(g => `<span class="tag">${g}</span>`).join('')}</div>
+        <p>${p.category}</p>
+        <div class="product-meta"><span class="price">${money(p.price)}</span><span class="stock">${p.stock}</span></div>
+        <p>${p.tone}</p>
         <div class="product-actions">
-          <button class="details-btn" onclick="openProduct(${p.id})">View Details</button>
-          <button onclick="addToCart(${p.id})">Add to Cart</button>
+          <button class="btn secondary" data-view="${p.id}">View Details</button>
+          <button class="btn primary" data-add="${p.id}">Add</button>
         </div>
       </div>
-    </article>
-  `).join('');
+    </article>`).join('') : `<div class="empty-state">No products found. Try another search or category.</div>`;
+  document.querySelectorAll('[data-view]').forEach(b=>b.addEventListener('click',()=>openProduct(+b.dataset.view)));
+  document.querySelectorAll('[data-add]').forEach(b=>b.addEventListener('click',()=>addToCart(+b.dataset.add)));
 }
 
-function selectCategory(category) {
-  activeCategory = category;
-  renderProducts();
-  $('products').scrollIntoView({ behavior: 'smooth' });
+function openProduct(id){
+  const p = products.find(x=>x.id===id); if(!p) return;
+  $('productModalContent').innerHTML = `<div class="product-detail"><img src="${p.img}" alt="${p.name}"><div><p class="eyebrow">${p.category}</p><h2>${p.name}</h2><div class="product-meta"><span class="price">${money(p.price)}</span><span class="stock">${p.stock}</span></div><p>${p.desc}</p><div class="detail-tags">${p.genres.map(g=>`<span class="tag">${g}</span>`).join('')}</div><div class="detail-grid"><div><strong>Tone:</strong><br>${p.tone}</div><div><strong>Best playing styles:</strong><br>${p.styles.join(', ')}</div><div><strong>Recommended skill level:</strong><br>${p.level}</div><div><strong>Online shop info:</strong><br>Rating ${p.rating}/5 • ${p.reviews} reviews • Warranty inquiry available</div></div><button class="btn primary" data-add-modal="${p.id}">Add to Cart</button></div></div>`;
+  openModal('productModal');
+  document.querySelector('[data-add-modal]').addEventListener('click',()=>addToCart(p.id));
 }
 
-function openProduct(id) {
-  const p = products.find(item => item.id === id);
-  if (!p) return;
-  $('productModalContent').innerHTML = `
-    <div class="modal-product">
-      <img src="${p.img}" alt="${p.name}">
-      <div class="modal-product-body">
-        <p class="eyebrow">${p.category}</p>
-        <h2>${p.name}</h2>
-        <div class="product-meta"><span class="price">${pesos.format(p.price)}</span><span class="stock">${p.stock}</span></div>
-        <p>${p.desc}</p>
-        <div class="detail-grid">
-          <div class="detail-box"><strong>Tone</strong>${p.tone}</div>
-          <div class="detail-box"><strong>Skill Level</strong>${p.level}</div>
-          <div class="detail-box"><strong>Best Genres</strong>${p.genres.join(', ')}</div>
-          <div class="detail-box"><strong>Best Playing Styles</strong>${p.styles.join(', ')}</div>
-        </div>
-        <button class="btn primary" onclick="addToCart(${p.id})">Add to Cart</button>
-      </div>
-    </div>
-  `;
-  $('productModal').classList.remove('hidden');
+function addToCart(id){
+  const item = cart.find(i=>i.id===id);
+  if(item) item.qty += 1; else cart.push({id,qty:1});
+  saveCart(); showToast('Added to cart');
+}
+function updateCartCount(){ $('cartCount').textContent = cart.reduce((s,i)=>s+i.qty,0); }
+function cartTotal(){ return cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id); return s+(p?p.price*i.qty:0)},0); }
+function renderCart(){
+  if(!cart.length){ $('cartItems').innerHTML = '<div class="empty-state">Your cart is empty.</div>'; }
+  else $('cartItems').innerHTML = cart.map(i=>{ const p=products.find(x=>x.id===i.id); if(!p) return ''; return `<div class="cart-item"><img src="${p.img}" alt="${p.name}"><div><strong>${p.name}</strong><br><span>${money(p.price)} each</span><br><small>Subtotal: ${money(p.price*i.qty)}</small></div><div><div class="qty-controls"><button data-minus="${p.id}">−</button><strong>${i.qty}</strong><button data-plus="${p.id}">+</button></div><button class="remove-btn" data-remove="${p.id}">Remove</button></div></div>`; }).join('');
+  $('cartTotal').textContent = money(cartTotal());
+  $('checkoutTotal').textContent = money(cartTotal());
+  document.querySelectorAll('[data-plus]').forEach(b=>b.addEventListener('click',()=>{cart.find(i=>i.id==b.dataset.plus).qty++; saveCart(); renderCart();}));
+  document.querySelectorAll('[data-minus]').forEach(b=>b.addEventListener('click',()=>{const item=cart.find(i=>i.id==b.dataset.minus); item.qty--; if(item.qty<=0) cart=cart.filter(i=>i.id!=b.dataset.minus); saveCart(); renderCart();}));
+  document.querySelectorAll('[data-remove]').forEach(b=>b.addEventListener('click',()=>{cart=cart.filter(i=>i.id!=b.dataset.remove); saveCart(); renderCart();}));
 }
 
-function closeProductModal() { $('productModal').classList.add('hidden'); }
-
-function addToCart(id) {
-  const p = products.find(item => item.id === id);
-  if (!p) return;
-  const existing = cart.find(item => item.id === id);
-  if (existing) existing.qty += 1;
-  else cart.push({ ...p, qty: 1 });
-  updateCart();
-  showToast(`${p.name} added to cart!`);
-}
-
-function updateCart() {
-  const count = cart.reduce((sum, item) => sum + item.qty, 0);
-  const total = cart.reduce((sum, item) => sum + item.qty * item.price, 0);
-  $('cartCount').textContent = count;
-  $('cartSubtotal').textContent = pesos.format(total);
-  $('cartTotal').textContent = pesos.format(total);
-  if (cart.length === 0) {
-    $('cartItems').innerHTML = '<p class="empty-state">Your cart is empty.</p>';
-  } else {
-    $('cartItems').innerHTML = cart.map(item => `
-      <div class="cart-item">
-        <img src="${item.img}" alt="${item.name}">
-        <div>
-          <h4>${item.name}</h4>
-          <p>${pesos.format(item.price)} each</p>
-          <div class="qty-controls">
-            <button onclick="changeQty(${item.id}, -1)">−</button>
-            <strong>${item.qty}</strong>
-            <button onclick="changeQty(${item.id}, 1)">+</button>
-            <button class="remove-btn" onclick="removeFromCart(${item.id})">Remove</button>
-          </div>
-        </div>
-        <strong class="cart-item-total">${pesos.format(item.qty * item.price)}</strong>
-      </div>
-    `).join('');
-  }
-}
-
-function changeQty(id, delta) {
-  const item = cart.find(i => i.id === id);
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) removeFromCart(id);
-  updateCart();
-}
-
-function removeFromCart(id) {
-  cart = cart.filter(i => i.id !== id);
-  updateCart();
-}
-
-function openCart() {
-  updateCart();
-  $('cartModal').classList.remove('hidden');
-}
-function closeCart() { $('cartModal').classList.add('hidden'); }
-
-function renderPaymentFields() {
-  const method = $('paymentMethod').value;
-  const fields = $('paymentFields');
-  if (method === 'cod') {
-    fields.innerHTML = '<p class="payment-note">Please prepare exact payment upon delivery.</p>';
-  } else if (method === 'gcash') {
-    fields.innerHTML = '<input id="gcashNumber" type="tel" placeholder="GCash Number" />';
-  } else if (method === 'card') {
-    fields.innerHTML = `
-      <input id="cardNumber" type="text" placeholder="Card Number" />
-      <input id="cardHolder" type="text" placeholder="Card Holder Name" />
-      <input id="cardExpiry" type="text" placeholder="Expiration Date (MM/YY)" />
-      <input id="cardCvv" type="password" placeholder="CVV" />
-    `;
-  } else {
-    fields.innerHTML = '';
-  }
-}
-
-function validateCheckout() {
-  if (cart.length === 0) return 'Your cart is empty.';
-  if (!$('checkoutName').value.trim() || !$('checkoutContact').value.trim() || !$('checkoutAddress').value.trim() || !$('paymentMethod').value) return 'Please complete your checkout details.';
-  const method = $('paymentMethod').value;
-  if (method === 'gcash' && !document.getElementById('gcashNumber')?.value.trim()) return 'Please enter your GCash number.';
-  if (method === 'card') {
-    const required = ['cardNumber','cardHolder','cardExpiry','cardCvv'];
-    if (required.some(id => !document.getElementById(id)?.value.trim())) return 'Please complete your card details.';
-  }
-  return '';
-}
-
-function renderGenres() {
-  const names = Object.keys(genres);
-  $('genreTabs').innerHTML = names.map((g, i) => `<button class="genre-tab ${i===0?'active':''}" onclick="selectGenre('${g}', this)">${g}</button>`).join('');
-  selectGenre(names[0], null);
-}
-
-function selectGenre(genre, button) {
-  document.querySelectorAll('.genre-tab').forEach(btn => btn.classList.remove('active'));
-  if (button) button.classList.add('active');
-  else document.querySelector('.genre-tab')?.classList.add('active');
-  const recommended = genres[genre].map(name => products.find(p => p.name === name)).filter(Boolean);
-  $('genreResult').innerHTML = `
-    <h3>${genre} Recommendations</h3>
-    <p>Recommended instruments for ${genre.toLowerCase()} players based on tone, style, and category fit.</p>
-    <div class="genre-list">
-      ${recommended.map(p => `<div class="genre-item"><strong>${p.name}</strong><br><span>${p.category}</span><br><small>${p.tone}</small><br><button class="small-btn" onclick="openProduct(${p.id})">View</button></div>`).join('')}
-    </div>
-  `;
-}
-
-function attachEvents() {
-  $('mobileMenuBtn').addEventListener('click', () => $('navLinks').classList.toggle('open'));
-  document.querySelectorAll('#navLinks a').forEach(a => a.addEventListener('click', () => $('navLinks').classList.remove('open')));
-  $('searchToggle').addEventListener('click', () => {
-    $('searchPanel').classList.toggle('hidden');
-    if (!$('searchPanel').classList.contains('hidden')) $('searchInput').focus();
+function setupEvents(){
+  $('mobileMenuBtn').addEventListener('click',()=>$('navLinks').classList.toggle('active'));
+  $('searchToggle').addEventListener('click',()=>$('searchBar').classList.toggle('active'));
+  $('searchInput').addEventListener('input',e=>{currentSearch=e.target.value; renderProducts(); document.querySelector('#best-sellers').scrollIntoView({behavior:'smooth'});});
+  document.querySelectorAll('.chip').forEach(c=>c.addEventListener('click',()=>setFilter(c.dataset.filter)));
+  $('cartButton').addEventListener('click',()=>{renderCart(); openModal('cartModal');});
+  document.querySelectorAll('[data-close]').forEach(el=>el.addEventListener('click',()=>closeModal(el.dataset.close+'Modal')));
+  $('clearCartBtn').addEventListener('click',()=>{cart=[]; saveCart(); renderCart(); showToast('Cart cleared');});
+  $('checkoutBtn').addEventListener('click',()=>{ if(!cart.length){showToast('Your cart is empty.'); return;} renderCart(); closeModal('cartModal'); openModal('checkoutModal');});
+  $('paymentMethod').addEventListener('change',e=>{
+    document.querySelectorAll('.payment-fields').forEach(f=>f.classList.remove('active'));
+    $(`${e.target.value}Fields`).classList.add('active');
   });
-  $('searchInput').addEventListener('input', e => { searchTerm = e.target.value; renderProducts(); });
-  $('cartButton').addEventListener('click', openCart);
-  $('closeCartModal').addEventListener('click', closeCart);
-  $('closeProductModal').addEventListener('click', closeProductModal);
-  $('clearCartBtn').addEventListener('click', () => { cart = []; updateCart(); $('checkoutForm').classList.add('hidden'); });
-  $('checkoutBtn').addEventListener('click', () => {
-    if (cart.length === 0) { showToast('Your cart is empty.'); return; }
-    $('checkoutForm').classList.toggle('hidden');
-  });
-  $('paymentMethod').addEventListener('change', renderPaymentFields);
-  $('checkoutForm').addEventListener('submit', e => {
+  $('checkoutForm').addEventListener('submit',e=>{
     e.preventDefault();
-    const error = validateCheckout();
-    if (error) { $('checkoutStatus').textContent = error; return; }
-    $('checkoutStatus').textContent = 'Thank you for ordering from MR ToneWorks! Your order has been received.';
-    cart = [];
-    updateCart();
+    if(!cart.length){showToast('Your cart is empty.');return;}
+    const method=$('paymentMethod').value;
+    const basic=[$('fullName').value,$('contactNumber').value,$('address').value].every(v=>v.trim());
+    let paymentOk=true;
+    if(method==='gcash') paymentOk=!!$('gcashNumber').value.trim();
+    if(method==='card') paymentOk=[$('cardNumber').value,$('cardHolder').value,$('expirationDate').value,$('cvv').value].every(v=>v.trim());
+    if(!basic || !paymentOk){showToast('Please complete your checkout details.');return;}
+    cart=[]; saveCart(); renderCart(); closeModal('checkoutModal'); $('checkoutForm').reset(); document.querySelectorAll('.payment-fields').forEach(f=>f.classList.remove('active')); $('codFields').classList.add('active'); showToast('Thank you for ordering from MR ToneWorks! Your order has been received.');
   });
-  $('contactForm').addEventListener('submit', e => {
-    e.preventDefault();
-    $('contactStatus').textContent = 'Thank you for contacting MR ToneWorks!';
-    e.target.reset();
-  });
-  document.querySelectorAll('.modal').forEach(modal => modal.addEventListener('click', e => { if (e.target === modal) modal.classList.add('hidden'); }));
+  $('contactForm').addEventListener('submit',e=>{e.preventDefault(); e.target.reset(); showToast('Thank you for contacting MR ToneWorks!');});
 }
 
-renderCategories();
-renderProducts();
-renderGenres();
-updateCart();
-attachEvents();
+renderCategories(); renderGenres(); renderProducts(); updateCartCount(); setupEvents();
