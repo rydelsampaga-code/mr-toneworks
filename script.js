@@ -26,6 +26,29 @@ const imageFor = (query, sig) => {
   return svgIcon('acoustic','Acoustic Guitar','Steel-String Acoustic');
 };
 
+
+function kindFor(item){
+  const text = ((item.category||'') + ' ' + (item.name||'') + ' ' + (item.short||'')).toLowerCase();
+  if(text.includes('drum')) return 'drums';
+  if(text.includes('keyboard') || text.includes('piano') || text.includes('keys')) return 'keyboard';
+  if(text.includes('bass')) return 'bass';
+  if(text.includes('nylon') || text.includes('classical') || text.includes('cordoba') || text.includes('alvarez')) return 'nylon';
+  if(text.includes('electric') || text.includes('strat') || text.includes('tele') || text.includes('les paul') || text.includes('sg') || text.includes('ibanez')) return 'electric';
+  if(text.includes('accessor') || text.includes('picks') || text.includes('capo') || text.includes('strings') || text.includes('cable')) return 'accessory';
+  return 'acoustic';
+}
+
+function instrumentVisual(item, compact=false){
+  const kind = kindFor(item);
+  const title = item.short || item.name || 'Instrument';
+  const label = kind === 'nylon' ? 'Nylon / Classical' : kind === 'electric' ? 'Electric Guitar' : kind === 'bass' ? 'Bass Guitar' : kind === 'keyboard' ? 'Keyboard' : kind === 'drums' ? 'Drum Kit' : kind === 'accessory' ? 'Accessory' : 'Acoustic Guitar';
+  return `<div class="instrument-visual ${kind} ${compact?'compact':''}" role="img" aria-label="${title}">
+    <div class="visual-glow"></div>
+    <div class="visual-icon"></div>
+    <div class="visual-text"><strong>${title}</strong><span>${label}</span></div>
+  </div>`;
+}
+
 const products = [
   {id:1,name:'Martin D-28',category:'Acoustic Guitars',price:2899.99,img:imageFor('steel string dreadnought acoustic guitar',1),rating:5,reviews:567,desc:'Legendary dreadnought acoustic with professional projection and rich rosewood character.',tone:'Rich, powerful, deep dreadnought tone with strong bass and sparkling highs.',genres:['Country','Folk','Bluegrass','Singer-Songwriter'],styles:['Flatpicking','Strumming','Recording','Live Performance'],level:'Advanced to Professional',stock:'In Stock'},
   {id:2,name:'Martin D-18',category:'Acoustic Guitars',price:2499.99,img:imageFor('mahogany acoustic guitar dreadnought',2),rating:5,reviews:432,desc:'Classic mahogany dreadnought known for balance, warmth, and rootsy acoustic character.',tone:'Warm, woody, balanced Martin tone.',genres:['Folk','Country','Blues','Americana'],styles:['Fingerpicking','Strumming','Songwriting'],level:'Intermediate to Professional',stock:'In Stock'},
@@ -102,7 +125,7 @@ function closeModal(id){ $(id).classList.remove('open'); $(id).setAttribute('ari
 function renderCategories(){
   $('categoryGrid').innerHTML = categories.map(c => `
     <article class="category-card" data-category="${c.name}">
-      <img src="${c.img}" alt="${c.short}" loading="lazy">
+      ${instrumentVisual(c)}
       <div class="content"><h3>${c.short}</h3><p>${c.desc}</p></div>
     </article>`).join('');
   document.querySelectorAll('.category-card').forEach(card => card.addEventListener('click', () => setFilter(card.dataset.category)));
@@ -141,7 +164,7 @@ function renderProducts(){
   const list = filteredProducts();
   $('productGrid').innerHTML = list.length ? list.map(p=>`
     <article class="product-card">
-      <img src="${p.img}" alt="${p.name}" loading="lazy">
+      ${instrumentVisual(p)}
       <div class="content">
         <h3>${p.name}</h3>
         <p>${p.category}</p>
@@ -159,7 +182,7 @@ function renderProducts(){
 
 function openProduct(id){
   const p = products.find(x=>x.id===id); if(!p) return;
-  $('productModalContent').innerHTML = `<div class="product-detail"><img src="${p.img}" alt="${p.name}"><div><p class="eyebrow">${p.category}</p><h2>${p.name}</h2><div class="product-meta"><span class="price">${money(p.price)}</span><span class="stock">${p.stock}</span></div><p>${p.desc}</p><div class="detail-tags">${p.genres.map(g=>`<span class="tag">${g}</span>`).join('')}</div><div class="detail-grid"><div><strong>Tone:</strong><br>${p.tone}</div><div><strong>Best playing styles:</strong><br>${p.styles.join(', ')}</div><div><strong>Recommended skill level:</strong><br>${p.level}</div><div><strong>Online shop info:</strong><br>Rating ${p.rating}/5 • ${p.reviews} reviews • Warranty inquiry available</div></div><button class="btn primary" data-add-modal="${p.id}">Add to Cart</button></div></div>`;
+  $('productModalContent').innerHTML = `<div class="product-detail">${instrumentVisual(p)}<div><p class="eyebrow">${p.category}</p><h2>${p.name}</h2><div class="product-meta"><span class="price">${money(p.price)}</span><span class="stock">${p.stock}</span></div><p>${p.desc}</p><div class="detail-tags">${p.genres.map(g=>`<span class="tag">${g}</span>`).join('')}</div><div class="detail-grid"><div><strong>Tone:</strong><br>${p.tone}</div><div><strong>Best playing styles:</strong><br>${p.styles.join(', ')}</div><div><strong>Recommended skill level:</strong><br>${p.level}</div><div><strong>Online shop info:</strong><br>Rating ${p.rating}/5 • ${p.reviews} reviews • Warranty inquiry available</div></div><button class="btn primary" data-add-modal="${p.id}">Add to Cart</button></div></div>`;
   openModal('productModal');
   document.querySelector('[data-add-modal]').addEventListener('click',()=>addToCart(p.id));
 }
@@ -173,7 +196,7 @@ function updateCartCount(){ $('cartCount').textContent = cart.reduce((s,i)=>s+i.
 function cartTotal(){ return cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id); return s+(p?p.price*i.qty:0)},0); }
 function renderCart(){
   if(!cart.length){ $('cartItems').innerHTML = '<div class="empty-state">Your cart is empty.</div>'; }
-  else $('cartItems').innerHTML = cart.map(i=>{ const p=products.find(x=>x.id===i.id); if(!p) return ''; return `<div class="cart-item"><img src="${p.img}" alt="${p.name}"><div><strong>${p.name}</strong><br><span>${money(p.price)} each</span><br><small>Subtotal: ${money(p.price*i.qty)}</small></div><div><div class="qty-controls"><button data-minus="${p.id}">−</button><strong>${i.qty}</strong><button data-plus="${p.id}">+</button></div><button class="remove-btn" data-remove="${p.id}">Remove</button></div></div>`; }).join('');
+  else $('cartItems').innerHTML = cart.map(i=>{ const p=products.find(x=>x.id===i.id); if(!p) return ''; return `<div class="cart-item">${instrumentVisual(p,true)}<div><strong>${p.name}</strong><br><span>${money(p.price)} each</span><br><small>Subtotal: ${money(p.price*i.qty)}</small></div><div><div class="qty-controls"><button data-minus="${p.id}">−</button><strong>${i.qty}</strong><button data-plus="${p.id}">+</button></div><button class="remove-btn" data-remove="${p.id}">Remove</button></div></div>`; }).join('');
   $('cartTotal').textContent = money(cartTotal());
   $('checkoutTotal').textContent = money(cartTotal());
   document.querySelectorAll('[data-plus]').forEach(b=>b.addEventListener('click',()=>{cart.find(i=>i.id==b.dataset.plus).qty++; saveCart(); renderCart();}));
