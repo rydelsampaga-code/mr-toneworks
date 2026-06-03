@@ -68,6 +68,27 @@ const categoryGrid = $('categoryGrid');
 const genreTabs = $('genreTabs');
 const genreResult = $('genreResult');
 
+const zeloReactions = {
+  add: ['assets/images/zelo-awow.jpg', 'AWOW!', 'Added to cart, brooo.'],
+  empty: ['assets/images/zelo-waah.jpg', 'WAAAH!', 'Your cart is empty.'],
+  checkout: ['assets/images/zelo-cool.jpg', 'Do I look cool yet?', 'Preparing checkout...'],
+  receipt: ['assets/images/zelo-hahaha.jpg', 'HAHAHA BROOO!', 'Order confirmed and receipt generated.'],
+  search: ['assets/images/zelo-hmmm.jpg', 'Hmmm?', 'Looking for tone...'],
+  thankyou: ['assets/images/zelo-love.jpg', 'Love you!', 'Thank you for shopping at MR ToneWorks.']
+};
+let zeloTimer;
+function showZelo(type='add', customText=''){
+  const data = zeloReactions[type] || zeloReactions.add;
+  const toast = $('zeloToast');
+  if(!toast) return;
+  $('zeloToastImg').src = data[0];
+  $('zeloToastTitle').textContent = data[1];
+  $('zeloToastText').textContent = customText || data[2];
+  toast.classList.add('show');
+  clearTimeout(zeloTimer);
+  zeloTimer = setTimeout(()=>toast.classList.remove('show'), 2200);
+}
+
 function saveCart(){ localStorage.setItem('mrCart', JSON.stringify(cart)); updateCartCount(); }
 function updateCartCount(){ $('cartCount').textContent = cart.reduce((s,i)=>s+i.qty,0); }
 function openModal(id){ $(id).classList.add('show'); $(id).setAttribute('aria-hidden','false'); }
@@ -134,6 +155,7 @@ function addToCart(id){
   if(item) item.qty++;
   else cart.push({id:p.id,name:p.name,price:p.price,qty:1,category:p.category});
   saveCart();
+  showZelo('add', `${p.name} added to cart.`);
 }
 function changeQty(id, delta){
   const item = cart.find(x=>x.id==id);
@@ -197,6 +219,7 @@ function showReceipt(data){
   closeModal('checkoutModal'); closeModal('cartModal');
   $('receiptPage').classList.add('show');
   $('receiptPage').scrollIntoView({behavior:'smooth'});
+  showZelo('receipt');
   cart = []; saveCart(); renderCart();
 }
 
@@ -224,11 +247,11 @@ document.addEventListener('click', e => {
 });
 
 document.querySelector('.menu-toggle').addEventListener('click',()=>document.querySelector('.nav-links').classList.toggle('show'));
-$('searchInput').addEventListener('input', renderProducts);
+$('searchInput').addEventListener('input', ()=>{ renderProducts(); if($('searchInput').value.trim()) showZelo('search'); });
 $('categorySelect').addEventListener('change', e=>{ selectedCategory=e.target.value; renderCategories(); renderProducts(); });
-$('openCart').addEventListener('click',()=>{ renderCart(); openModal('cartModal'); });
-$('clearCart').addEventListener('click',()=>{ cart=[]; saveCart(); renderCart(); });
-$('goCheckout').addEventListener('click',()=>{ if(!cart.length){ alert('Your cart is empty.'); return; } closeModal('cartModal'); renderPaymentFields(); openModal('checkoutModal'); });
+$('openCart').addEventListener('click',()=>{ renderCart(); openModal('cartModal'); if(!cart.length) showZelo('empty'); });
+$('clearCart').addEventListener('click',()=>{ cart=[]; saveCart(); renderCart(); showZelo('empty','Cart cleared.'); });
+$('goCheckout').addEventListener('click',()=>{ if(!cart.length){ showZelo('empty'); alert('Your cart is empty.'); return; } showZelo('checkout'); closeModal('cartModal'); renderPaymentFields(); openModal('checkoutModal'); });
 $('paymentMethod').addEventListener('change', renderPaymentFields);
 $('checkoutForm').addEventListener('submit', e=>{
   e.preventDefault();
@@ -239,7 +262,7 @@ $('checkoutForm').addEventListener('submit', e=>{
   if(required.some(k=>!String(data[k]||'').trim())){ alert('Please complete your checkout details.'); return; }
   showReceipt(data);
 });
-$('contactForm').addEventListener('submit', e=>{ e.preventDefault(); alert('Thank you for contacting MR ToneWorks!'); e.target.reset(); });
+$('contactForm').addEventListener('submit', e=>{ e.preventDefault(); showZelo('thankyou','Message sent. We will get back to you.'); alert('Thank you for contacting MR ToneWorks!'); e.target.reset(); });
 
 document.querySelectorAll('.modal').forEach(m=>m.addEventListener('click', e=>{ if(e.target===m) closeModal(m.id); }));
 

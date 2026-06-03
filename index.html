@@ -27,6 +27,7 @@
         <p class="eyebrow">Premium Music Store</p>
         <h1>Find Your Sound.<br><span>Play Your Story.</span></h1>
         <p class="hero-text">Shop acoustic, nylon, electric, bass, drums, keyboards, and accessories built for every player and genre.</p>
+        <p class="hero-signature">Curated by Rydel Hernandez & Mark Kian Moral</p>
         <div class="hero-actions">
           <a href="#best-sellers" class="btn primary">Shop Now</a>
           <a href="#instruments" class="btn secondary">Explore Categories</a>
@@ -78,13 +79,41 @@
     </section>
 
     <section class="section about-section" id="about">
-      <div class="about-card">
-        <div>
+      <div class="about-card founders-card">
+        <div class="about-copy">
           <p class="eyebrow">About Us</p>
           <h2>MR ToneWorks</h2>
-          <p>MR ToneWorks is an online music instrument store designed to help musicians choose the right instrument based on tone, genre, playing style, and skill level. The system supports browsing, product details, cart, checkout, and receipt generation.</p>
+          <p>MR ToneWorks is an online music instrument store designed by <strong>Rydel Hernandez</strong> and <strong>Mark Kian Moral</strong> for a Fundamentals of Information Systems project. The interface helps musicians choose instruments based on tone, genre, playing style, and skill level while supporting browsing, product details, cart, checkout, and receipt generation.</p>
+          <div class="founder-badges">
+            <span>Rydel Hernandez · Co-owner / Music & UI Concept</span>
+            <span>Mark Kian Moral · Co-owner / Project Partner</span>
+          </div>
         </div>
-        <img src="assets/images/store-hero.svg" alt="MR ToneWorks music store" />
+        <div class="founder-photo-stack">
+          <img src="assets/images/founder-garden.jpg" alt="Rydel playing guitar outdoors" />
+          <img src="assets/images/founder-cafe.jpg" alt="Rydel at a café" />
+        </div>
+      </div>
+
+      <div class="story-grid">
+        <article class="story-card large-story">
+          <img src="assets/images/founder-beach.jpg" alt="Rydel playing guitar by the beach" />
+          <div>
+            <p class="eyebrow">Founder Story</p>
+            <h3>Built by players, for players.</h3>
+            <p>MR ToneWorks carries a personal musician’s touch: practical recommendations, genre-based guidance, and a warm performance-inspired identity.</p>
+          </div>
+        </article>
+        <article class="story-card">
+          <img src="assets/images/founder-coat.jpg" alt="Rydel performing Coat of Many Colors" />
+          <h3>From performance to product guidance</h3>
+          <p>A store concept shaped by actual guitar playing, stage experience, and storytelling.</p>
+        </article>
+        <article class="story-card zelo-card" id="zeloCard">
+          <img src="assets/images/zelo-stickers.jpg" alt="Zelo sticker reactions" />
+          <h3>Zelo Helper</h3>
+          <p>A tiny hidden assistant appears during cart, checkout, and receipt moments for a playful MR ToneWorks touch.</p>
+        </article>
       </div>
     </section>
 
@@ -105,6 +134,15 @@
   <footer>
     <p>© 2026 MR ToneWorks | GitHub Pages Business Interface Project</p>
   </footer>
+
+
+  <div class="zelo-toast" id="zeloToast" aria-live="polite">
+    <img id="zeloToastImg" src="assets/images/zelo-awow.jpg" alt="Zelo reaction" />
+    <div>
+      <strong id="zeloToastTitle">AWOW!</strong>
+      <p id="zeloToastText">Added to cart.</p>
+    </div>
+  </div>
 
   <div class="modal" id="productModal" aria-hidden="true">
     <div class="modal-panel product-panel">
