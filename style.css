@@ -21,3 +21,10 @@
 .receipt-card:before{content:"";display:block;height:110px;margin:-16px -16px 18px;border-radius:18px;background:linear-gradient(90deg,rgba(0,0,0,.82),rgba(0,0,0,.18)),url('assets/images/founder-beach.jpg');background-size:cover;background-position:center 45%;border:1px solid var(--line)}
 @media(max-width:900px){.founders-card,.story-grid,.large-story{grid-template-columns:1fr}.founder-photo-stack img{height:300px}.large-story img{min-height:280px}.story-grid{gap:16px}}
 @media(max-width:620px){.founder-photo-stack{grid-template-columns:1fr}.founder-photo-stack img{height:270px}.zelo-toast{right:14px;bottom:14px}.zelo-toast img{width:72px;height:58px}}
+
+
+/* Mark photo added to About section */
+.founder-photo-stack{grid-template-columns:repeat(3,1fr)}
+.founder-photo-stack img:nth-child(3){object-position:center center}
+@media(max-width:900px){.founder-photo-stack{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:620px){.founder-photo-stack{grid-template-columns:1fr}}
